@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+.env
+*.db
+*.sqlite3
+uploads/
+
+# Node
+node_modules/
+dist/
+.env.local
+.env.*.local
+
+# IDE
+.DS_Store
+.vscode/
+.idea/

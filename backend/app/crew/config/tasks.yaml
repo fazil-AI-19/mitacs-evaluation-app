@@ -1,0 +1,214 @@
+preliminary_review_task:
+  description: >
+    Read the research proposal document at the path provided. The file path is: {docx_path}
+
+    Review the document for the following Mitacs requirements:
+
+    1. Presence of all required sections: Executive Summary, Project Description,
+       Research Objectives, Methodology, Timeline, Budget Justification,
+       Academic Partner details, Industry Partner details, Expected Outcomes,
+       and HQP (Highly Qualified Personnel) Training Plan.
+    2. Eligibility: The PI must be a tenured or tenure-track faculty member at
+       a Canadian academic institution. An industry or non-profit partner must be
+       clearly identified with their role and cash or in-kind contribution stated.
+    3. Formatting: The proposal should appear compliant with standard Mitacs
+       page and formatting guidelines.
+
+    For each criterion, determine whether it PASSES or FAILS, and quote the
+    relevant excerpt or note its absence. Produce a structured completeness report.
+  expected_output: >
+    A JSON object with these exact fields:
+    - sections_present: object mapping section name to boolean (true if present, false if missing)
+      Keys: "executive_summary", "project_description", "research_objectives",
+      "methodology", "timeline", "budget_justification", "academic_partner",
+      "industry_partner", "expected_outcomes", "hqp_training_plan"
+    - eligibility_issues: array of strings describing any eligibility deficiencies (empty if none)
+    - formatting_issues: array of strings describing formatting problems (empty if none)
+    - completeness_score: number between 0 and 100
+    - summary: string with a short narrative summary of the completeness assessment
+  agent: preliminary_review_agent
+
+research_review_task:
+  description: >
+    Read the research proposal document at the path provided. The file path is: {docx_path}
+
+    Evaluate the proposal against the eight official Mitacs Accelerate adjudication
+    criteria. Score each criterion and provide a written comment as described below.
+
+    CRITERIA 1-6 (score 1-5, mandatory for every proposal):
+
+    1. Technical Merit (technical_merit_score):
+       - 5: Technically sound, rigorous, and scientifically excellent. Methods are
+            well-justified with clear validation and risk mitigation.
+       - 4: Mostly sound with minor gaps. Small technical uncertainties exist.
+       - 3: Adequate but with notable technical weaknesses that need addressing.
+       - 2: Significant technical gaps; core methods lack justification.
+       - 1: Fundamentally flawed or unclear technical approach.
+
+    2. Research Qualification (research_qualification_score):
+       Does this project qualify as research? Does it contribute to new knowledge
+       rather than being a routine development or consulting activity?
+       - 5: Clearly experimental/empirical/theoretical; strong contribution to knowledge.
+       - 4: Qualifies as research; knowledge contribution reasonably demonstrated.
+       - 3: Research qualification is present but contribution to knowledge is weak.
+       - 2: Primarily development or application; minimal new knowledge generation.
+       - 1: Does not qualify as research.
+
+    3. Objective Definition (objective_definition_score):
+       Are the objectives well-defined and reasonable? Do they directly address the
+       stated research problem?
+       - 5: Objectives are SMART (specific, measurable, achievable, relevant, time-bound)
+            and directly address the problem.
+       - 4: Objectives are clear and reasonable with minor alignment gaps.
+       - 3: Objectives are stated but partially vague or not fully addressing the problem.
+       - 2: Objectives are ambiguous or misaligned with the stated problem.
+       - 1: No clear objectives stated.
+
+    4. Methodology (methodology_score):
+       Is the approach well-defined, detailed, and appropriate for achieving the objectives?
+       - 5: Approach is detailed, well-justified, appropriate, with controls and contingencies.
+       - 4: Approach is appropriate with minor methodological gaps.
+       - 3: Approach is mentioned but lacks detail or justification.
+       - 2: Approach is vague or inappropriate for the objectives.
+       - 1: No methodology described.
+
+    5. Work Plan Feasibility (work_plan_feasibility_score):
+       Is the work plan achievable given the proposed timeline and available resources
+       (team expertise, equipment, budget)?
+       - 5: Fully feasible; timeline and resources are well-matched to scope.
+       - 4: Largely feasible with minor concerns about timeline or resources.
+       - 3: Feasibility questionable; some tasks may be under-resourced or rushed.
+       - 2: Significant feasibility concerns; timeline or resources clearly insufficient.
+       - 1: Work plan is not feasible.
+
+    6. Intern Development (intern_development_score):
+       Does the project offer an appropriate and meaningful learning opportunity for an
+       intern at their stated degree level (undergraduate, master's, PhD, postdoc)?
+       - 5: Role is tailored to degree level, with clear mentorship and skills development plan.
+       - 4: Good development opportunity; mentorship is adequate.
+       - 3: Some development value but mentorship plan or degree-level alignment is weak.
+       - 2: Intern role appears peripheral or not aligned with degree level.
+       - 1: No meaningful intern development component.
+
+    CRITERIA 7-8 (score 0-5; assign 0 if Not Applicable):
+
+    7. Indigenous Research Policy (indigenous_research_policy_score):
+       First determine applicability. Assign score 0 ONLY if the project has
+       NO connection whatsoever to Indigenous peoples, communities, organisations,
+       lands, data, or knowledge. Assign score 1-5 if ANY of the following
+       triggers are present — even partially or implicitly:
+         - Involvement of Indigenous communities, groups, or organisations
+           (as partners, collaborators, co-designers, advisors, or beneficiaries)
+         - Participation of Indigenous individuals as research subjects, knowledge
+           holders, co-investigators, or co-applicants
+         - Use of Indigenous traditional knowledge, cultural heritage, or
+           community-held data
+         - Research conducted on Indigenous lands or territories
+         - Community co-design or co-governance of the research process
+         - Research whose primary intended beneficiaries are Indigenous peoples
+         - Explicit reference to Indigenous data sovereignty, governance principles,
+           or self-determination in the proposal
+       When in doubt, err on the side of assigning a compliance score (1-5) rather
+       than 0. A genuine "Not Applicable" is only appropriate when the proposal
+       contains no mention of Indigenous peoples, communities, or knowledge at all.
+       - If NOT APPLICABLE (no Indigenous connection of any kind): assign score 0.
+       - If APPLICABLE: assess all four sub-requirements:
+         (a) Community support and respect for Indigenous culture and protocols
+         (b) Collaborative research practices and partnership with Indigenous communities
+         (c) Access and use governance for research outputs and data
+         (d) Team experience/expertise in Indigenous research and intern mentorship plan
+         Score 1-5 based on how thoroughly all four are addressed.
+
+    8. Research Security (research_security_score):
+       Check whether any of these six flags apply to this proposal:
+       (a) STRA (Security and Trust Risk Assessment) involvement required
+       (b) Affiliations with Named Research Organizations (NROs) or high-risk foreign entities
+       (c) Research involving critical minerals, critical infrastructure, or dual-use technology
+       (d) Sensitive personal data collection or processing
+       (e) Export-controlled goods, technologies, or software
+       (f) Intellectual property transfer or licensing to a non-academic partner
+       - If NONE of (a)-(f) apply: assign score 0 and note "Not Applicable".
+       - If ANY flag applies: assess compliance with Mitacs Research Security Plan (Aug 2024):
+         assess STRA/NRO declarations, IP protection clarity, and demonstrated benefits to Canada.
+         Score 1-5 based on adequacy of security measures and disclosures.
+
+    SCORING CALIBRATION (apply to criteria 1-6):
+    A score of 5 is exceptional — only give 5 if the criterion is addressed
+    thoroughly with no meaningful gaps. Most real proposals have gaps; if you
+    find yourself giving mostly 4s and 5s, re-read the proposal more critically.
+    - Score 5: Excellent, no meaningful gaps.
+    - Score 4: Good, only minor gaps.
+    - Score 3: Adequate, but notable weaknesses present.
+    - Score 2: Significant deficiencies; missing key elements.
+    - Score 1: Fundamentally missing or flawed.
+    Before finalising any score above 3, ask: "What specific gap or weakness
+    prevents a lower score?" If you cannot point to a concrete proposal excerpt,
+    lower the score.
+
+    COMMENT INSTRUCTIONS for all eight criteria:
+    - Cite specific evidence from the proposal (section names, quotes, or observations).
+    - For any score of 1-4 on criteria 1-6: include at least two specific actionable steps
+      the applicant can take to improve the score.
+    - For criteria 7-8 scoring 1-4: address each applicable sub-requirement and include
+      actionable steps.
+    - For criteria 7-8 scoring 0: briefly state why the criterion is not applicable.
+
+    OVERALL SCORE:
+    Compute overall_scientific_score as the average of criteria 1-6 scores only
+    (technical_merit, research_qualification, objective_definition, methodology,
+    work_plan_feasibility, intern_development), then scale to 0-100 proportionally
+    where 5=100 and 1=20. Formula: ((sum_of_6_scores / 6) - 1) / 4 * 80 + 20.
+    Do NOT include criteria 7 or 8 in this calculation.
+  expected_output: >
+    A JSON object with these exact fields:
+    - technical_merit_score: integer 1-5
+    - research_qualification_score: integer 1-5
+    - objective_definition_score: integer 1-5
+    - methodology_score: integer 1-5
+    - work_plan_feasibility_score: integer 1-5
+    - intern_development_score: integer 1-5
+    - indigenous_research_policy_score: integer 0-5 (0 = Not Applicable)
+    - research_security_score: integer 0-5 (0 = Not Applicable)
+    - criteria_comments: object with keys "technical_merit", "research_qualification",
+      "objective_definition", "methodology", "work_plan_feasibility", "intern_development",
+      "indigenous_research_policy", "research_security", each mapping to a string comment
+    - overall_scientific_score: number 0-100 (average of criteria 1-6 only, scaled proportionally)
+    - summary: string with a narrative summary of the overall scientific merit assessment
+  agent: research_review_agent
+  context:
+    - preliminary_review_task
+
+decision_task:
+  description: >
+    Using the completeness review and scientific merit review outputs provided
+    as context, produce a final evaluation for proposal ID {proposal_id}.
+
+    Scoring weights:
+    - Completeness score (from preliminary review): 50%
+    - Scientific merit score (from research review): 50%
+
+    Compute: final_score = (completeness_score * 0.5) + (overall_scientific_score * 0.5)
+    Round to one decimal place.
+
+    Apply decision thresholds:
+    - final_score >= 90: recommendation = "accept"
+    - final_score >= 60 and < 90: recommendation = "revise_and_resubmit"
+    - final_score < 60: recommendation = "reject"
+
+    Write a detailed justification (at least 150 words) explaining the score,
+    highlighting the proposal strengths, and listing specific actionable items
+    for revision if applicable.
+  expected_output: >
+    A JSON object with these exact fields:
+    - proposal_id: integer (use the value {proposal_id})
+    - final_score: number between 0 and 100
+    - recommendation: string, exactly one of "accept", "reject", or "revise_and_resubmit"
+    - justification: string with detailed written justification (minimum 150 words)
+    - strengths: array of strings listing notable strengths
+    - weaknesses: array of strings listing significant weaknesses or gaps
+    - action_items: array of strings with specific actionable revision items
+      (empty array for "accept" or "reject" if no specific actions needed)
+  agent: decision_agent
+  context:
+    - preliminary_review_task
+    - research_review_task
