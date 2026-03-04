@@ -8,7 +8,6 @@ passlib[bcrypt]
 bcrypt==4.0.1
 python-multipart
 pydantic-settings
-tiktoken==0.7.0
 crewai
 crewai-tools
 python-docx
