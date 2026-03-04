@@ -3,7 +3,7 @@ from typing import Any
 
 from crewai import Agent, Crew, LLM, Process, Task
 from crewai.project import CrewBase, agent, crew, task
-from crewai_tools import DOCXSearchTool
+from app.crew.tools import DocxReadTool
 
 from app.config import settings
 from app.schemas.agent_outputs import (
@@ -476,7 +476,7 @@ class EvaluationCrew:
         return Agent(
             config=self.agents_config["preliminary_review_agent"],
             llm=self._llm,
-            tools=[DOCXSearchTool(docx=self._docx_path, collection_name=f"proposal_{abs(hash(self._docx_path))}_prelim")],
+            tools=[DocxReadTool(docx_path=self._docx_path)],
         )
 
     @agent
@@ -484,7 +484,7 @@ class EvaluationCrew:
         return Agent(
             config=self.agents_config["research_review_agent"],
             llm=self._llm,
-            tools=[DOCXSearchTool(docx=self._docx_path, collection_name=f"proposal_{abs(hash(self._docx_path))}_research")],
+            tools=[DocxReadTool(docx_path=self._docx_path)],
         )
 
     @agent
