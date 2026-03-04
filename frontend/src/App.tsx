@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<Navigate to="/reviewer/dashboard" replace />} />
+          <Route path="/" element={<Navigate to="/applicant/submit" replace />} />
 
           {/* Applicant routes */}
           <Route

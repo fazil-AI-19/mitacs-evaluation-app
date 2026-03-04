@@ -78,7 +78,7 @@ export default function MyProposalsPage() {
       <Navbar />
       <main className="max-w-3xl mx-auto px-4 py-10">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">My Proposals</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Applicant Dashboard</h1>
           <Link
             to="/applicant/submit"
             className="bg-mitacs-blue hover:bg-mitacs-navy text-white text-sm font-medium px-4 py-2 rounded"

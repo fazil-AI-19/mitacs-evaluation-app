@@ -11,6 +11,9 @@ export default function Navbar() {
           <Link to="/applicant/submit" className="hover:underline text-sm">
             Submit Proposal
           </Link>
+          <Link to="/applicant/proposals" className="hover:underline text-sm">
+            Applicant Dashboard
+          </Link>
           <Link to="/reviewer/dashboard" className="hover:underline text-sm">
             Reviewer Dashboard
           </Link>

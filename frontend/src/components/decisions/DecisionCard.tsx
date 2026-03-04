@@ -30,7 +30,7 @@ export default function DecisionCard({ decision }: Props) {
         </div>
         <div>
           <span
-            className={`inline-block px-3 py-1.5 rounded-full text-sm font-semibold ${REC_STYLES[displayRec]}`}
+            className={`inline-block px-3 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap ${REC_STYLES[displayRec]}`}
           >
             {REC_LABELS[displayRec]}
           </span>

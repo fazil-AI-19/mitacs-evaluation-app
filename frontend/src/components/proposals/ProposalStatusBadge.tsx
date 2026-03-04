@@ -14,7 +14,7 @@ const CONFIG: Record<
 export default function ProposalStatusBadge({ status }: { status: ProposalStatus }) {
   const { label, className } = CONFIG[status] ?? CONFIG.pending;
   return (
-    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${className}`}>
+    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${className}`}>
       {label}
     </span>
   );

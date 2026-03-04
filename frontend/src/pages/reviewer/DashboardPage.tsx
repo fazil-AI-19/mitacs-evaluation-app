@@ -28,7 +28,7 @@ const REC_LABELS: Record<Recommendation, string> = {
 
 function RecPill({ rec }: { rec: Recommendation }) {
   return (
-    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${REC_STYLES[rec]}`}>
+    <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${REC_STYLES[rec]}`}>
       {REC_LABELS[rec]}
     </span>
   );
@@ -106,7 +106,6 @@ export default function DashboardPage() {
                   <tr>
                     <th className="px-4 py-3 text-left">Title</th>
                     <th className="px-4 py-3 text-left">Applicant</th>
-                    <th className="px-4 py-3 text-left">Institution</th>
                     <th className="px-4 py-3 text-left">Submitted</th>
                     <th className="px-4 py-3 text-left">Status</th>
                     <th className="px-4 py-3 text-left">AI Recommendation</th>
@@ -121,7 +120,6 @@ export default function DashboardPage() {
                         {p.title}
                       </td>
                       <td className="px-4 py-3 text-gray-600">{p.applicant_name}</td>
-                      <td className="px-4 py-3 text-gray-600">{p.institution}</td>
                       <td className="px-4 py-3 text-gray-500">
                         {new Date(p.submitted_at).toLocaleDateString()}
                       </td>
