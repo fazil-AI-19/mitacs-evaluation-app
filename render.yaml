@@ -13,6 +13,8 @@ services:
     startCommand: cd backend && sh start.sh
 
     envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
       - key: SECRET_KEY
         generateValue: true
       - key: OPENAI_API_KEY
